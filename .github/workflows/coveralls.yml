@@ -8,18 +8,31 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
-    - uses: actions/checkout@v1
-
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
+      # Checks out a copy of your repository
+    - name: Checkout code
+      if: ${{ !steps.skip-workflow.outputs.skip }}
+      uses: actions/checkout@v2
       with:
-        node-version: 10.x
+        repository: nasa/cFS
+        submodules: true
 
-    - name: npm install, make test-coverage
+    - name: Check versions
+      if: ${{ !steps.skip-workflow.outputs.skip }}
       run: |
-        npm install
-        make test-coverage
+         git log -1 --pretty=oneline
+         git submodule
+
+    # Setup the build system
+    - name: Copy sample_defs
+      if: ${{ !steps.skip-workflow.outputs.skip }}
+      run: |
+        cp ./cfe/cmake/Makefile.sample Makefile
+        cp -r ./cfe/cmake/sample_defs sample_defs
+
+    # Setup the build system
+    - name: Make Install
+      if: ${{ !steps.skip-workflow.outputs.skip }}
+      run: make
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
