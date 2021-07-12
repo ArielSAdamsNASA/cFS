@@ -45,7 +45,6 @@ jobs:
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
-
       # Setup the build system
       - name: Make Prep
         run: make prep
@@ -53,7 +52,6 @@ jobs:
       - name: Build Docs
         run: |
           make doc > make_doc_stdout.txt 2> make_doc_stderr.txt
-
       # Upload documentation logs as artifacts
       - name: Archive Documentation Build Logs
         uses: actions/upload-artifact@v2
@@ -62,15 +60,15 @@ jobs:
           path: |
             make_doc_stdout.txt
             make_doc_stderr.txt
-
       - name: Error Check
         run: |
           if [[ -s make_doc_stderr.txt ]]; then
             cat make_doc_stderr.txt
             exit -1
           fi
-
   build-usersguide:
+    needs: checks-for-duplicates
+    if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
     # Name the Job
     name: Users Guide
     # Set the type of machine to run on
@@ -78,37 +76,29 @@ jobs:
 
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: true
           persist-credentials: false
 
       # Setup the build system
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Copy Files
+      - name: Copy Files
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
-
       # Setup the build system   
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Make Prep
+      - name: Make Prep
         run: make prep
 
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Install Dependencies
+      - name: Install Dependencies
         run: sudo apt-get install doxygen graphviz -y
 
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Build Usersguide
+      - name: Build Usersguide
         run: |
           make usersguide > make_usersguide_stdout.txt 2> make_usersguide_stderr.txt
           mv build/doc/warnings.log usersguide_warnings.log
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Archive Users Guide Build Logs
+      - name: Archive Users Guide Build Logs
         uses: actions/upload-artifact@v2
         with:
           name: Users Guide Artifacts
@@ -116,23 +106,18 @@ jobs:
             make_usersguide_stdout.txt
             make_usersguide_stderr.txt
             usersguide_warnings.log
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Error Check
+      - name: Error Check
         run: |
           if [[ -s make_usersguide_stderr.txt ]]; then
             cat make_usersguide_stderr.txt
             exit -1
           fi
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Warning Check
+      - name: Warning Check
         run: |
           if [[ -s usersguide_warnings.log ]]; then
             cat usersguide_warnings.log
             exit -1
           fi
-
   pdf-usersguide:  
     needs: build-usersguide
     # Name the Job
@@ -146,7 +131,6 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
@@ -157,7 +141,6 @@ jobs:
           mv refman.pdf $GITHUB_WORKSPACE/deploy/cFE_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
           # pandoc CFE_Users_Guide.pdf -t gfm
-
       - name: Deploy
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         uses: JamesIves/github-pages-deploy-action@3.7.1
@@ -169,6 +152,8 @@ jobs:
           SINGLE_COMMIT: true
 
   build-osalguide:
+    needs: checks-for-duplicates
+    if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
     # Name the Job
     name: Osal Guide
     # Set the type of machine to run on
@@ -176,37 +161,29 @@ jobs:
 
     steps:
       # Checks out a copy of your repository on the ubuntu-latest machine
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: true
           persist-credentials: false
 
       # Setup the build system
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Copy Files
+      - name: Copy Files
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
-
       # Setup the build system 
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Make Prep
+      - name: Make Prep
         run: make prep
 
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Install Dependencies
+      - name: Install Dependencies
         run: sudo apt-get install doxygen graphviz -y
 
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Build OSAL Guide
+      - name: Build OSAL Guide
         run: |
           make osalguide > make_osalguide_stdout.txt 2> make_osalguide_stderr.txt
           mv build/doc/osalguide/osal-apiguide-warnings.log osal-apiguide-warnings.log
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Archive Osal Guide Build Logs
+      - name: Archive Osal Guide Build Logs
         uses: actions/upload-artifact@v2
         with:
           name: OSAL Guide Artifacts
@@ -214,24 +191,18 @@ jobs:
             make_osalguide_stdout.txt
             make_osalguide_stderr.txt
             osal-apiguide-warnings.log
-
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Error Check
+      - name: Error Check
         run: |
           if [[ -s make_osalguide_stderr.txt ]]; then
             cat make_osalguide_stderr.txt
             exit -1
           fi
-
-      - if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
-        name: Warning Check
+      - name: Warning Check
         run: |
           if [[ -s osal-apiguide-warnings.log ]]; then
             cat osal-apiguide-warnings.log
             exit -1
           fi
-
   pdf-osalguide:    
     needs: build-osalguide
     # Name the Job
@@ -243,7 +214,6 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
@@ -253,7 +223,6 @@ jobs:
           mv refman.pdf $GITHUB_WORKSPACE/deploy/OSAL_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
           # pandoc CFE_Users_Guide.pdf -t gfm
-
       - name: Deploy
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         uses: JamesIves/github-pages-deploy-action@3.7.1
