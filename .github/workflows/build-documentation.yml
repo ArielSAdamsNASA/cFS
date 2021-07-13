@@ -45,6 +45,7 @@ jobs:
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
+
       # Setup the build system
       - name: Make Prep
         run: make prep
@@ -52,6 +53,7 @@ jobs:
       - name: Build Docs
         run: |
           make doc > make_doc_stdout.txt 2> make_doc_stderr.txt
+
       # Upload documentation logs as artifacts
       - name: Archive Documentation Build Logs
         uses: actions/upload-artifact@v2
@@ -60,12 +62,14 @@ jobs:
           path: |
             make_doc_stdout.txt
             make_doc_stderr.txt
+
       - name: Error Check
         run: |
           if [[ -s make_doc_stderr.txt ]]; then
             cat make_doc_stderr.txt
             exit -1
           fi
+
   build-usersguide:
     needs: checks-for-duplicates
     if: ${{ needs.checks-for-duplicates.outputs.should_skip != 'true' }}
@@ -87,6 +91,7 @@ jobs:
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
+
       # Setup the build system   
       - name: Make Prep
         run: make prep
@@ -97,7 +102,7 @@ jobs:
       - name: Build Usersguide
         run: |
           make usersguide > make_usersguide_stdout.txt 2> make_usersguide_stderr.txt
-          mv build/doc/warnings.log usersguide_warnings.log
+
       - name: Archive Users Guide Build Logs
         uses: actions/upload-artifact@v2
         with:
@@ -105,19 +110,22 @@ jobs:
           path: |
             make_usersguide_stdout.txt
             make_usersguide_stderr.txt
-            usersguide_warnings.log
+            cfe-usersguide-warnings.log
+
       - name: Error Check
         run: |
           if [[ -s make_usersguide_stderr.txt ]]; then
             cat make_usersguide_stderr.txt
             exit -1
           fi
+
       - name: Warning Check
         run: |
-          if [[ -s usersguide_warnings.log ]]; then
-            cat usersguide_warnings.log
+          if [[ -s cfe-usersguide-warnings.log ]]; then
+            cat cfe-usersguide-warnings.log
             exit -1
           fi
+
   pdf-usersguide:  
     needs: build-usersguide
     # Name the Job
@@ -131,16 +139,18 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           set -x
           mkdir deploy
-          cd ./build/doc/users_guide/latex
+          cd ./build/docs/users_guide/latex
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/cFE_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
           # pandoc CFE_Users_Guide.pdf -t gfm
+
       - name: Deploy
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         uses: JamesIves/github-pages-deploy-action@3.7.1
@@ -172,6 +182,7 @@ jobs:
         run: |
           cp ./cfe/cmake/Makefile.sample Makefile
           cp -r ./cfe/cmake/sample_defs sample_defs
+
       # Setup the build system 
       - name: Make Prep
         run: make prep
@@ -182,7 +193,8 @@ jobs:
       - name: Build OSAL Guide
         run: |
           make osalguide > make_osalguide_stdout.txt 2> make_osalguide_stderr.txt
-          mv build/doc/osalguide/osal-apiguide-warnings.log osal-apiguide-warnings.log
+          mv build/docs/osalguide/osal-apiguide-warnings.log osal-apiguide-warnings.log
+
       - name: Archive Osal Guide Build Logs
         uses: actions/upload-artifact@v2
         with:
@@ -191,18 +203,21 @@ jobs:
             make_osalguide_stdout.txt
             make_osalguide_stderr.txt
             osal-apiguide-warnings.log
+
       - name: Error Check
         run: |
           if [[ -s make_osalguide_stderr.txt ]]; then
             cat make_osalguide_stderr.txt
             exit -1
           fi
+
       - name: Warning Check
         run: |
           if [[ -s osal-apiguide-warnings.log ]]; then
             cat osal-apiguide-warnings.log
             exit -1
           fi
+
   pdf-osalguide:    
     needs: build-osalguide
     # Name the Job
@@ -214,15 +229,17 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           mkdir deploy
-          cd ./build/doc/osalguide/latex
+          cd ./build/docs/osalguide/apiguide/latex
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/OSAL_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
           # pandoc CFE_Users_Guide.pdf -t gfm
+
       - name: Deploy
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         uses: JamesIves/github-pages-deploy-action@3.7.1
