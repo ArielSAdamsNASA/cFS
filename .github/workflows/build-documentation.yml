@@ -145,7 +145,7 @@ jobs:
         run: |
           set -x
           mkdir deploy
-          cd ./build/docs/users_guide/latex
+          cd ./build/doc/users_guide/latex
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/cFE_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
