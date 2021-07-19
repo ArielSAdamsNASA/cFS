@@ -1,0 +1,57 @@
+name: "CodeQL Analysis"
+
+# Only trigger, when the build workflow succeeded
+on:
+  workflow_run:
+    workflows:
+      - Coverity
+    types:
+      - completed
+
+env:
+  SIMULATION: native
+  ENABLE_UNIT_TESTS: true
+  OMIT_DEPRECATED: true
+  BUILDTYPE: release
+
+jobs:      
+  CodeQL-Security-Build:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 15
+
+    steps:
+      # Checks out a copy of your repository
+      - name: Checkout code
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        uses: actions/checkout@v2
+        with:
+          repository: nasa/cFS
+          submodules: true
+
+      - name: Check versions
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        run: |
+           git log -1 --pretty=oneline
+           git submodule
+      - name: Initialize CodeQL
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        uses: github/codeql-action/init@v1
+        with:
+          languages: c
+          config-file: ./.github/codeql/codeql-security.yml
+
+      # Setup the build system
+      - name: Copy sample_defs
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        run: |
+          cp ./cfe/cmake/Makefile.sample Makefile
+          cp -r ./cfe/cmake/sample_defs sample_defs
+      # Setup the build system
+      - name: Make Install
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        run: make
+
+      # Run CodeQL
+      - name: Perform CodeQL Analysis
+        if: ${{ !steps.skip-workflow.outputs.skip }}
+        uses: github/codeql-action/analyze@v1
