@@ -1,4 +1,4 @@
-name: "CodeQL Analysis"
+name: "Workflow Test"
 
 # Only trigger, when the build workflow succeeded
 on:
