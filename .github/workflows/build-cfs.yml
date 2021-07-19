@@ -1,4 +1,4 @@
-name: Build, Test, and Run [OMIT_DEPRECATED=true]
+name: Build, Test, and Run
 
 # Run every time a new commit pushed or for pull requests
 on:
