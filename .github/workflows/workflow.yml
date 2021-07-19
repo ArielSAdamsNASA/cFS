@@ -3,8 +3,7 @@ name: "Workflow Test"
 # Only trigger, when the build workflow succeeded
 on:
   workflow_run:
-    workflows:
-      - Coverity
+    workflows: ["Build, Test, and Run [OMIT_DEPRECATED=true]"]
     types:
       - completed
     branches: 
