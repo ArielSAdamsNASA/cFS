@@ -4,7 +4,7 @@ name: "Workflow Test"
 on:
   workflow_run:
     workflows: 
-      - Deprecated Build, Test, and Run
+      - Build, Test, and Run [OMIT_DEPRECATED=true]
     types:
       - completed
     branches: 
