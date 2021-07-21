@@ -230,21 +230,16 @@ jobs:
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
 
-      - name: PDF generation
+      - name: FILE
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           mkdir deploy
           ls
-          cd ./build
-          ls
-          cd docs
-          ls
-          cd osalguide
-          ls
-          cd apiguide
-          ls 
-          cd latex
-          cd ./build/docs/osalguide/apiguide/latex
+          
+      - name: PDF generation
+        if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
+        run: |    
+          cd ./build/docs/osalguide/apiguide
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/OSAL_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
