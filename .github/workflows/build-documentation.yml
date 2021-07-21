@@ -227,18 +227,13 @@ jobs:
     steps:
       - name: Runner
         run: |
-            cd /home/runner
+            cd /home/runner/work
             ls 
  
       - name: Runner
         run: |
-            cd work
-            ls 
-            
-      - name: Runner
-        run: |
-            cd cFS-JSF-Rules
-            ls   
+            cd /home/runner/work/cFS-JSF-Rules
+            ls  
             
       - name: Cache cFS Build Environment
         id: cache-cfs
