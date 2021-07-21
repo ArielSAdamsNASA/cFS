@@ -145,7 +145,7 @@ jobs:
         run: |
           set -x
           mkdir deploy
-          cd ./build/docs/users_guide/latex
+          cd ./build/docs/
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/cFE_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
@@ -229,25 +229,12 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-       
-      - name: FILE
-        if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
-        run: |  
-          mkdir deploy
-          cd ../../
-          ls
-       
-      - name: FILE1
-        if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
-        run: |  
-          cd ../
-          ls
           
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |  
           mkdir deploy
-          cd ../build/docs/osalguide/apiguide/latex
+          cd ./build/docs/osalguide
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/OSAL_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
