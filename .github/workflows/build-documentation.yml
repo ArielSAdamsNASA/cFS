@@ -217,11 +217,48 @@ jobs:
             cat osal-apiguide-warnings.log
             exit -1
           fi
-          
+
+  pdf-osalguide:    
+    needs: build-osalguide
+    # Name the Job
+    name: PDF Osal Guide
+    # Set the type of machine to run on
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Runner
+        run: |
+            cd /home
+            ls 
+            
+      - name: Runner
+        run: |
+            cd runner
+            ls 
+ 
+      - name: Runner
+        run: |
+            cd work
+            ls 
+            
+      - name: Runner
+        run: |
+            cd cFS-JSF-Rules
+            ls   
+            
+      - name: Cache cFS Build Environment
+        id: cache-cfs
+        uses: actions/cache@v2
+        with:
+          path: |
+            /home/runner/work/cFS-JSF-Rules/cfs/cfs/*
+          key: cfs-${{ github.run_number }}
+    
+    
       - name: PDF generation installs
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+        working-directory: /home/runner/work/cFS-JSF-Rules/cfs/cfs
 
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
