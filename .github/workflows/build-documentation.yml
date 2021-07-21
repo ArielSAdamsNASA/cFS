@@ -224,31 +224,19 @@ jobs:
     name: PDF Osal Guide
     # Set the type of machine to run on
     runs-on: ubuntu-18.04
-    steps:
-      - name: Runner
-        run: |
-            cd /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules
-            ls 
- 
-      - name: Runner
-        run: |
-            cd /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/cFS-JSF-Rules
-            ls  
-            
+    steps:            
       - name: Cache cFS Build Environment
-        id: cache-cfs
+        id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: |
-            /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/cFS-JSF-Rules/*
-          key: cfs-${{ github.run_number }}
+          path: /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/*
+          key: bundle-${{ github.run_number }}
     
     
       - name: PDF generation installs
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-        working-directory: /home/runner/work/cFS-JSF-Rules/cfs/cfs
 
       - name: PDF generation
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
