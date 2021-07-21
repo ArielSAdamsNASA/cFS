@@ -227,12 +227,12 @@ jobs:
     steps:
       - name: Runner
         run: |
-            cd /home/runner/work
+            cd /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules
             ls 
  
       - name: Runner
         run: |
-            cd /home/runner/work/cFS-JSF-Rules
+            cd /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/cFS-JSF-Rules
             ls  
             
       - name: Cache cFS Build Environment
@@ -240,7 +240,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            /home/runner/work/cFS-JSF-Rules/cfs/cfs/*
+            /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/cFS-JSF-Rules/*
           key: cfs-${{ github.run_number }}
     
     
