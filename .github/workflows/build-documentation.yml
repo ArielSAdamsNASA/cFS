@@ -234,7 +234,17 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
           mkdir deploy
-          cd ./build/doc/osalguide/apiguide/latex
+          ls
+          cd build
+          ls
+          cd docs
+          ls
+          cd osalguide
+          ls
+          cd apiguide
+          ls 
+          cd latex
+          cd ./build/docs/osalguide/apiguide/latex
           make > build.txt
           mv refman.pdf $GITHUB_WORKSPACE/deploy/OSAL_Users_Guide.pdf
           # Could add pandoc and convert to github markdown
