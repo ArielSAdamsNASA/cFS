@@ -227,12 +227,7 @@ jobs:
     steps:
       - name: Runner
         run: |
-            cd /home
-            ls 
-            
-      - name: Runner
-        run: |
-            cd runner
+            cd /home/runner
             ls 
  
       - name: Runner
