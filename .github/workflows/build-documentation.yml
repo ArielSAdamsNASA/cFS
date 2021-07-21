@@ -217,14 +217,7 @@ jobs:
             cat osal-apiguide-warnings.log
             exit -1
           fi
-
-  pdf-osalguide:    
-    needs: build-osalguide
-    # Name the Job
-    name: PDF Osal Guide
-    # Set the type of machine to run on
-    runs-on: ubuntu-18.04
-    steps:
+          
       - name: PDF generation installs
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
