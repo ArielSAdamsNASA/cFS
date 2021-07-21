@@ -235,7 +235,7 @@ jobs:
         run: |
           mkdir deploy
           ls
-          cd build
+          cd ./build
           ls
           cd docs
           ls
