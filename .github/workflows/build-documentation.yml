@@ -127,6 +127,13 @@ jobs:
             exit -1
           fi
 
+      - name: Cache cFS Build Environment
+        id: cache-bundle
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          key: bundle-${{ github.run_number }}
+          
   pdf-usersguide:  
     needs: build-usersguide
     # Name the Job
@@ -135,7 +142,13 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    
+      - name: Cache cFS Build Environment
+        id: cache-bundle
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          key: bundle-${{ github.run_number }}
+          
       - name: PDF generation installs
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
         run: |
