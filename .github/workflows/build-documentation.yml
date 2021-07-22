@@ -131,7 +131,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          path: /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/*
           key: usersguide-buildnum-${{ github.run_number }}
           
   pdf-usersguide:  
@@ -146,7 +146,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          path: /home/runner/work/cFS-JSF-Rules/cFS-JSF-Rules/*
           key: usersguide-buildnum-${{ github.run_number }}
           
       - name: PDF generation installs
@@ -236,7 +236,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
+          path: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/*
           key: osalguide-buildnum-${{ github.run_number }}
           
   pdf-osalguide:    
@@ -250,7 +250,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
+          path: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/*
           key: osalguide-buildnum-${{ github.run_number }}
     
     
