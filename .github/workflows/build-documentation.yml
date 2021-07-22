@@ -132,7 +132,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/REPO_NAME/REPO_NAME/*
-          key: bundle-${{ github.run_number }}
+          key: usersguide-buildnum-${{ github.run_number }}
           
   pdf-usersguide:  
     needs: build-usersguide
@@ -147,7 +147,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/REPO_NAME/REPO_NAME/*
-          key: bundle-${{ github.run_number }}
+          key: usersguide-buildnum-${{ github.run_number }}
           
       - name: PDF generation installs
         if: ${{ github.event_name == 'push' && contains(github.ref, 'main')}}
@@ -237,7 +237,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
-          key: bundle-${{ github.run_number }}
+          key: osalguide-buildnum-${{ github.run_number }}
           
   pdf-osalguide:    
     needs: build-osalguide
@@ -251,7 +251,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
-          key: bundle-${{ github.run_number }}
+          key: osalguide-buildnum-${{ github.run_number }}
     
     
       - name: PDF generation installs
