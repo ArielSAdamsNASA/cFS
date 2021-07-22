@@ -131,7 +131,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/${{REPO_NAME}}/${{REPO_NAME}}/*
+          path: /home/runner/work/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}/*
           key: usersguide-buildnum-${{ github.run_number }}
           
   pdf-usersguide:  
@@ -146,7 +146,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/${{REPO_NAME}}/${{REPO_NAME}}/*
+          path: /home/runner/work/${{ env.REPO_NAME }}/${{ env.REPO_NAME }}/*
           key: usersguide-buildnum-${{ github.run_number }}
           
       - name: PDF generation installs
