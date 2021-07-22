@@ -236,7 +236,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
           key: bundle-${{ github.run_number }}
           
   pdf-osalguide:    
@@ -250,7 +250,7 @@ jobs:
         id: cache-bundle
         uses: actions/cache@v2
         with:
-          path: /home/runner/work/REPO_NAME/REPO_NAME/*
+          path: /home/runner/work/${REPO_NAME}/${REPO_NAME}/*
           key: bundle-${{ github.run_number }}
     
     
